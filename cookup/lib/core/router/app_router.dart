@@ -1,0 +1,18 @@
+import 'package:go_router/go_router.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:cookup/features/auth/pages/login_page.dart';
+import 'package:cookup/features/auth/pages/register_page.dart';
+import 'package:cookup/features/home/pages/home_page.dart';
+final routerProvider = Provider<GoRouter>((ref) {
+  return GoRouter(
+    initialLocation: '/login',
+    routes: [
+      GoRoute(path: '/login', builder: (context, state) => const LoginPage()),
+      GoRoute(
+        path: '/register',
+        builder: (context, state) => const RegisterPage(),
+      ),
+      GoRoute(path: '/home', builder: (context, state) => const HomePage()),
+    ],
+  );
+});
