@@ -2,15 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../data/history_mock_data.dart';
-import '../widgets/history_section.dart';
-import '../../home/navigation/home_bottom_nav.dart';
-import '../../home/widgets/bottom_navigation_bar.dart';
+import '../widgets/history_grid.dart';
 
-class HistoryPage extends ConsumerWidget {
-  const HistoryPage({super.key});
+class CookedHistoryPage extends ConsumerWidget {
+  const CookedHistoryPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final items = HistoryMockData.cookedItems;
     return Scaffold(
       backgroundColor: const Color(0xFFFF9538),
       body: SafeArea(
@@ -24,36 +23,19 @@ class HistoryPage extends ConsumerWidget {
                 const SizedBox(height: 12),
                 const _DashedDivider(),
                 const SizedBox(height: 16),
-                HistorySection(
-                  title: '作った料理',
-                  onMorePressed: () {
-                    context.go('/history/cooked');
-                  },
-                  items: HistoryMockData.cookedItems
-                      .take(3)
-                      .toList(growable: false),
+                Text(
+                  '作った料理',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
-                const SizedBox(height: 24),
-                HistorySection(
-                  title: 'お気に入り',
-                  onMorePressed: () {
-                    context.go('/history/favorite');
-                  },
-                  items: HistoryMockData.favoriteItems,
-                ),
+                const SizedBox(height: 12),
+                HistoryGrid(items: items),
               ],
             ),
           ),
         ),
-      ),
-      bottomNavigationBar: HomeBottomNavigationBar(
-        selectedIndex: HomeBottomNav.history,
-        onDestinationSelected: (index) {
-          if (index == HomeBottomNav.history) {
-            return;
-          }
-          HomeBottomNav.goToIndex(context, index);
-        },
       ),
     );
   }
@@ -67,6 +49,18 @@ class _HeaderRow extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
+        IconButton(
+          onPressed: () {
+            if (context.canPop()) {
+              context.pop();
+            } else {
+              context.go('/history');
+            }
+          },
+          icon: const Icon(Icons.arrow_back, color: Colors.black87),
+          tooltip: '戻る',
+        ),
+        const SizedBox(width: 4),
         const Text(
           'Cook\nUp',
           style: TextStyle(
@@ -80,7 +74,7 @@ class _HeaderRow extends StatelessWidget {
         const Icon(Icons.restaurant_menu, color: Colors.black87, size: 22),
         const SizedBox(width: 8),
         const Text(
-          '料理履歴',
+          '作った料理',
           style: TextStyle(
             color: Colors.white,
             fontSize: 22,

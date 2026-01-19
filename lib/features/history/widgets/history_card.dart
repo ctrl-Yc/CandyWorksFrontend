@@ -3,14 +3,21 @@ import '../models/history_item.dart';
 
 class HistoryCard extends StatelessWidget {
   final HistoryItem item;
+  final double? width;
+  final EdgeInsetsGeometry margin;
 
-  const HistoryCard({super.key, required this.item});
+  const HistoryCard({
+    super.key,
+    required this.item,
+    this.width = 140,
+    this.margin = const EdgeInsets.only(right: 12),
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 140,
-      margin: const EdgeInsets.only(right: 12),
+      width: width,
+      margin: margin,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
@@ -27,6 +34,7 @@ class HistoryCard extends StatelessWidget {
         padding: const EdgeInsets.all(10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
           children: [
             _ImageFrame(imageUrl: item.imageUrl),
             const SizedBox(height: 8),
