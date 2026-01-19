@@ -2,15 +2,63 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../data/history_mock_data.dart';
+import '../models/history_item.dart';
+import '../widgets/history_feedback_panel.dart';
 import '../widgets/history_section.dart';
 import '../../home/navigation/home_bottom_nav.dart';
 import '../../home/widgets/bottom_navigation_bar.dart';
 
-class HistoryPage extends ConsumerWidget {
+class HistoryPage extends ConsumerStatefulWidget {
   const HistoryPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HistoryPage> createState() => _HistoryPageState();
+}
+
+class _HistoryPageState extends ConsumerState<HistoryPage> {
+  String? _selectedCookedId;
+  String? _selectedFavoriteId;
+
+  void _handleCookedSelect(HistoryItem item) {
+    setState(() {
+      if (_selectedCookedId == item.id) {
+        _selectedCookedId = null;
+      } else {
+        _selectedCookedId = item.id;
+      }
+    });
+  }
+
+  void _handleFavoriteSelect(HistoryItem item) {
+    setState(() {
+      if (_selectedFavoriteId == item.id) {
+        _selectedFavoriteId = null;
+      } else {
+        _selectedFavoriteId = item.id;
+      }
+    });
+  }
+
+  HistoryItem? _findSelectedItem(
+    List<HistoryItem> items,
+    String? selectedId,
+  ) {
+    for (final item in items) {
+      if (item.id == selectedId) {
+        return item;
+      }
+    }
+    return null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final cookedItems =
+        HistoryMockData.cookedItems.take(3).toList(growable: false);
+    final favoriteItems = HistoryMockData.favoriteItems;
+    final selectedCooked = _findSelectedItem(cookedItems, _selectedCookedId);
+    final selectedFavorite =
+        _findSelectedItem(favoriteItems, _selectedFavoriteId);
     return Scaffold(
       backgroundColor: const Color(0xFFFF9538),
       body: SafeArea(
@@ -29,9 +77,30 @@ class HistoryPage extends ConsumerWidget {
                   onMorePressed: () {
                     context.go('/history/cooked');
                   },
-                  items: HistoryMockData.cookedItems
-                      .take(3)
-                      .toList(growable: false),
+                  items: cookedItems,
+                  selectedId: _selectedCookedId,
+                  onSelect: _handleCookedSelect,
+                ),
+                const SizedBox(height: 12),
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 250),
+                  switchInCurve: Curves.easeOut,
+                  switchOutCurve: Curves.easeIn,
+                  transitionBuilder: (child, animation) {
+                    return SlideTransition(
+                      position: Tween<Offset>(
+                        begin: const Offset(0, 0.08),
+                        end: Offset.zero,
+                      ).animate(animation),
+                      child: FadeTransition(opacity: animation, child: child),
+                    );
+                  },
+                  child: selectedCooked == null
+                      ? const SizedBox.shrink()
+                      : HistoryFeedbackPanel(
+                          key: ValueKey(selectedCooked.id),
+                          item: selectedCooked,
+                        ),
                 ),
                 const SizedBox(height: 24),
                 HistorySection(
@@ -39,7 +108,30 @@ class HistoryPage extends ConsumerWidget {
                   onMorePressed: () {
                     context.go('/history/favorite');
                   },
-                  items: HistoryMockData.favoriteItems,
+                  items: favoriteItems,
+                  selectedId: _selectedFavoriteId,
+                  onSelect: _handleFavoriteSelect,
+                ),
+                const SizedBox(height: 12),
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 250),
+                  switchInCurve: Curves.easeOut,
+                  switchOutCurve: Curves.easeIn,
+                  transitionBuilder: (child, animation) {
+                    return SlideTransition(
+                      position: Tween<Offset>(
+                        begin: const Offset(0, 0.08),
+                        end: Offset.zero,
+                      ).animate(animation),
+                      child: FadeTransition(opacity: animation, child: child),
+                    );
+                  },
+                  child: selectedFavorite == null
+                      ? const SizedBox.shrink()
+                      : HistoryFeedbackPanel(
+                          key: ValueKey(selectedFavorite.id),
+                          item: selectedFavorite,
+                        ),
                 ),
               ],
             ),

@@ -6,12 +6,16 @@ class HistorySection extends StatelessWidget {
   final String title;
   final VoidCallback onMorePressed;
   final List<HistoryItem> items;
+  final String? selectedId;
+  final ValueChanged<HistoryItem> onSelect;
 
   const HistorySection({
     super.key,
     required this.title,
     required this.onMorePressed,
     required this.items,
+    required this.selectedId,
+    required this.onSelect,
   });
 
   @override
@@ -53,7 +57,15 @@ class HistorySection extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             itemCount: items.length,
             itemBuilder: (context, index) {
-              return HistoryCard(item: items[index]);
+              final item = items[index];
+              final isSelected = item.id == selectedId;
+              return GestureDetector(
+                onTap: () => onSelect(item),
+                child: HistoryCard(
+                  item: item,
+                  isSelected: isSelected,
+                ),
+              );
             },
           ),
         ),
