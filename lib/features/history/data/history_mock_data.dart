@@ -9,6 +9,7 @@ class HistoryMockData {
       isFavorite: false,
       imageUrl:
           'https://images.unsplash.com/photo-1604909052743-94e838986d24',
+      feedback: 'タレの濃さが良く、ご飯が進みました。',
     ),
     HistoryItem(
       id: 'cooked-2',
@@ -17,6 +18,7 @@ class HistoryMockData {
       isFavorite: true,
       imageUrl:
           'https://images.unsplash.com/photo-1604908177522-2a74b3dcb59d',
+      feedback: '焼き加減がちょうどよく、肉汁がジューシーでした。',
     ),
   ];
 
@@ -28,6 +30,7 @@ class HistoryMockData {
       isFavorite: true,
       imageUrl:
           'https://images.unsplash.com/photo-1604908177522-2a74b3dcb59d',
+      feedback: 'ソースが絶品でまた作りたいです。',
     ),
   ];
 }

@@ -2,14 +2,43 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../data/history_mock_data.dart';
+import '../models/history_item.dart';
+import '../widgets/history_feedback_panel.dart';
 import '../widgets/history_grid.dart';
 
-class CookedHistoryPage extends ConsumerWidget {
+class CookedHistoryPage extends ConsumerStatefulWidget {
   const CookedHistoryPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<CookedHistoryPage> createState() => _CookedHistoryPageState();
+}
+
+class _CookedHistoryPageState extends ConsumerState<CookedHistoryPage> {
+  String? _selectedId;
+
+  void _handleSelect(HistoryItem item) {
+    setState(() {
+      if (_selectedId == item.id) {
+        _selectedId = null;
+      } else {
+        _selectedId = item.id;
+      }
+    });
+  }
+
+  HistoryItem? _findSelectedItem(List<HistoryItem> items) {
+    for (final item in items) {
+      if (item.id == _selectedId) {
+        return item;
+      }
+    }
+    return null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final items = HistoryMockData.cookedItems;
+    final selectedItem = _findSelectedItem(items);
     return Scaffold(
       backgroundColor: const Color(0xFFFF9538),
       body: SafeArea(
@@ -31,7 +60,32 @@ class CookedHistoryPage extends ConsumerWidget {
                   ),
                 ),
                 const SizedBox(height: 12),
-                HistoryGrid(items: items),
+                HistoryGrid(
+                  items: items,
+                  selectedId: _selectedId,
+                  onSelect: _handleSelect,
+                ),
+                const SizedBox(height: 18),
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 250),
+                  switchInCurve: Curves.easeOut,
+                  switchOutCurve: Curves.easeIn,
+                  transitionBuilder: (child, animation) {
+                    return SlideTransition(
+                      position: Tween<Offset>(
+                        begin: const Offset(0, 0.08),
+                        end: Offset.zero,
+                      ).animate(animation),
+                      child: FadeTransition(opacity: animation, child: child),
+                    );
+                  },
+                  child: selectedItem == null
+                      ? const SizedBox.shrink()
+                      : HistoryFeedbackPanel(
+                          key: ValueKey(selectedItem.id),
+                          item: selectedItem,
+                        ),
+                ),
               ],
             ),
           ),

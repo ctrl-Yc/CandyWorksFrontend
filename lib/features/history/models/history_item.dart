@@ -4,6 +4,7 @@ class HistoryItem {
   final String date;
   final bool isFavorite;
   final String imageUrl;
+  final String feedback;
 
   const HistoryItem({
     required this.id,
@@ -11,5 +12,6 @@ class HistoryItem {
     required this.date,
     required this.isFavorite,
     required this.imageUrl,
+    required this.feedback,
   });
 }
