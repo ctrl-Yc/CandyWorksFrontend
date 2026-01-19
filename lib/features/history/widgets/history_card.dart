@@ -5,30 +5,45 @@ class HistoryCard extends StatelessWidget {
   final HistoryItem item;
   final double? width;
   final EdgeInsetsGeometry margin;
+  final bool isSelected;
 
   const HistoryCard({
     super.key,
     required this.item,
     this.width = 140,
     this.margin = const EdgeInsets.only(right: 12),
+    this.isSelected = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    final borderColor = isSelected ? Colors.black87 : const Color(0xFF6B4423);
+    final borderWidth = isSelected ? 2.0 : 1.0;
+    final backgroundColor = isSelected ? const Color(0xFFFFF3E0) : Colors.white;
+    final boxShadow = isSelected
+        ? const [
+            BoxShadow(
+              color: Color(0x4D000000),
+              blurRadius: 8,
+              offset: Offset(0, 4),
+            ),
+          ]
+        : const [
+            BoxShadow(
+              color: Color(0x33000000),
+              blurRadius: 6,
+              offset: Offset(0, 3),
+            ),
+          ];
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
       width: width,
       margin: margin,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: backgroundColor,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFF6B4423), width: 1),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x33000000),
-            blurRadius: 6,
-            offset: Offset(0, 3),
-          ),
-        ],
+        border: Border.all(color: borderColor, width: borderWidth),
+        boxShadow: boxShadow,
       ),
       child: Padding(
         padding: const EdgeInsets.all(10),
@@ -52,10 +67,7 @@ class HistoryCard extends StatelessWidget {
               children: [
                 Text(
                   item.date,
-                  style: const TextStyle(
-                    color: Colors.black54,
-                    fontSize: 12,
-                  ),
+                  style: const TextStyle(color: Colors.black54, fontSize: 12),
                 ),
                 Icon(
                   item.isFavorite ? Icons.star : Icons.star_border,

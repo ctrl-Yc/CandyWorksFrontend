@@ -1,14 +1,47 @@
 import 'package:flutter/material.dart';
+import '../../history/data/history_mock_data.dart';
+import '../../history/models/history_item.dart';
 
-class ChallengeTab extends StatelessWidget {
+class ChallengeTab extends StatefulWidget {
   const ChallengeTab({super.key});
 
   @override
+  State<ChallengeTab> createState() => _ChallengeTabState();
+}
+
+class _ChallengeTabState extends State<ChallengeTab> {
+  int _currentIndex = 0;
+
+  List<HistoryItem> get _items =>
+      HistoryMockData.homeItems.take(3).toList(growable: false);
+
+  void _goToPrevious() {
+    setState(() {
+      _currentIndex -= 1;
+    });
+  }
+
+  void _goToNext() {
+    setState(() {
+      _currentIndex += 1;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final items = _items;
+    final hasItems = items.isNotEmpty;
+    final currentIndex = _currentIndex.clamp(
+      0,
+      items.isEmpty ? 0 : items.length - 1,
+    );
+    final canGoPrevious = currentIndex > 0;
+    final canGoNext = currentIndex < items.length - 1;
+    final currentItem = hasItems ? items[currentIndex] : null;
     return Column(
       children: [
         const Padding(
-          padding: EdgeInsets.symmetric(vertical: 16),
+          padding: EdgeInsets.symmetric(vertical: 8),
           child: Text(
             '今日のオススメ料理☆',
             style: TextStyle(
@@ -24,84 +57,64 @@ class ChallengeTab extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               // レシピカード
-              Flexible(
-                child: AspectRatio(
-                  aspectRatio: 0.75,
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 16),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: Colors.grey, width: 2),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Expanded(
-                          flex: 3,
-                          child: ClipRRect(
-                            borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(14),
-                              topRight: Radius.circular(14),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  IconButton(
+                    onPressed: canGoPrevious ? _goToPrevious : null,
+                    icon: const Icon(Icons.chevron_left),
+                    color: Colors.white,
+                    disabledColor: Colors.white54,
+                  ),
+                  Expanded(
+                    child: AspectRatio(
+                      aspectRatio: 0.9,
+                      child: AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 250),
+                        switchInCurve: Curves.easeOut,
+                        switchOutCurve: Curves.easeIn,
+                        transitionBuilder: (child, animation) {
+                          return SlideTransition(
+                            position: Tween<Offset>(
+                              begin: const Offset(0.08, 0),
+                              end: Offset.zero,
+                            ).animate(animation),
+                            child: FadeTransition(
+                              opacity: animation,
+                              child: child,
                             ),
-                            child: Container(
-                              color: Colors.grey[200],
-                              child: Stack(
-                                fit: StackFit.expand,
-                                children: [
-                                  Container(color: Colors.grey[200]),
-                                  // 画像を置き換える！
-                                  // Image.asset(
-                                  //   'assets/images/pork_shogayaki.jpg',
-                                  //   fit: BoxFit.cover,
-                                  // ),
-                                  Center(
-                                    child: Icon(
-                                      Icons.restaurant_menu,
-                                      size: 80,
-                                      color: Colors.grey[400],
-                                    ),
-                                  ),
-                                ],
+                          );
+                        },
+                        child: currentItem == null
+                            ? const SizedBox.shrink()
+                            : _RecipeCard(
+                                key: ValueKey(currentItem.id),
+                                item: currentItem,
                               ),
-                            ),
-                          ),
-                        ),
-
-                        Expanded(
-                          flex: 2,
-                          child: Padding(
-                            padding: const EdgeInsets.all(16),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                _buildInfoRow('料理名', '豚の生姜焼き'),
-                                const SizedBox(height: 8),
-                                _buildInfoRow('料理時間', '20分~25分'),
-                                const SizedBox(height: 8),
-                                _buildInfoRow('料理コスト', '230~250円'),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
-                ),
+                  IconButton(
+                    onPressed: canGoNext ? _goToNext : null,
+                    icon: const Icon(Icons.chevron_right),
+                    color: Colors.white,
+                    disabledColor: Colors.white54,
+                  ),
+                ],
               ),
 
               Padding(
-                padding: const EdgeInsets.only(top: 16),
+                padding: const EdgeInsets.only(top: 8),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _buildDot(isActive: true),
-                    const SizedBox(width: 8),
-                    _buildDot(isActive: false),
-                    const SizedBox(width: 8),
-                    _buildDot(isActive: false),
-                  ],
+                  children: List.generate(items.length, (index) {
+                    return Padding(
+                      padding: EdgeInsets.only(
+                        right: index == items.length - 1 ? 0 : 8,
+                      ),
+                      child: _buildDot(isActive: index == currentIndex),
+                    );
+                  }),
                 ),
               ),
             ],
@@ -110,6 +123,23 @@ class ChallengeTab extends StatelessWidget {
       ],
     );
   }
+
+  Widget _buildDot({required bool isActive}) {
+    return Container(
+      width: 8,
+      height: 8,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: isActive ? Colors.black : Colors.grey[300],
+      ),
+    );
+  }
+}
+
+class _RecipeCard extends StatelessWidget {
+  final HistoryItem item;
+
+  const _RecipeCard({super.key, required this.item});
 
   Widget _buildInfoRow(String label, String value) {
     return Row(
@@ -133,13 +163,61 @@ class ChallengeTab extends StatelessWidget {
     );
   }
 
-  Widget _buildDot({required bool isActive}) {
+  @override
+  Widget build(BuildContext context) {
     return Container(
-      width: 8,
-      height: 8,
+      margin: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: isActive ? Colors.black : Colors.grey[300],
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.grey, width: 2),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            flex: 3,
+            child: ClipRRect(
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(14),
+                topRight: Radius.circular(14),
+              ),
+              child: Image.network(
+                item.imageUrl,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Container(
+                    color: Colors.grey[200],
+                    child: Center(
+                      child: Icon(
+                        Icons.restaurant_menu,
+                        size: 80,
+                        color: Colors.grey[400],
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 2,
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _buildInfoRow('料理名', item.title),
+                  const SizedBox(height: 6),
+                  _buildInfoRow('料理時間', item.cookTime),
+                  const SizedBox(height: 6),
+                  _buildInfoRow('料理コスト', item.cookCost),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
