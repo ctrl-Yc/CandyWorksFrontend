@@ -11,10 +11,6 @@ class HomePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       backgroundColor: const Color(0xFFFF9538),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFFFF9538),
-        iconTheme: const IconThemeData(color: Colors.white),
-      ),
       body: SafeArea(
         child: Container(
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),

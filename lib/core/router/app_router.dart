@@ -5,6 +5,7 @@ import 'package:cookup/features/auth/pages/register_page.dart';
 import 'package:cookup/features/history/pages/cooked_history_page.dart';
 import 'package:cookup/features/history/pages/favorite_history_page.dart';
 import 'package:cookup/features/history/pages/history_page.dart';
+import 'package:cookup/features/challenge/pages/challenge_page.dart';
 import 'package:cookup/features/home/pages/home_page.dart';
 final routerProvider = Provider<GoRouter>((ref) {
   return GoRouter(
@@ -16,6 +17,10 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const RegisterPage(),
       ),
       GoRoute(path: '/home', builder: (context, state) => const HomePage()),
+      GoRoute(
+        path: '/challenge',
+        builder: (context, state) => const ChallengePage(),
+      ),
       GoRoute(
         path: '/history',
         builder: (context, state) => const HistoryPage(),

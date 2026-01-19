@@ -115,14 +115,10 @@ class _HeaderRow extends StatelessWidget {
           tooltip: '戻る',
         ),
         const SizedBox(width: 4),
-        const Text(
-          'Cook\nUp',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 28,
-            fontWeight: FontWeight.w700,
-            height: 0.9,
-          ),
+        Image.asset(
+          'assets/cookup_logo.png',
+          height: 40,
+          fit: BoxFit.contain,
         ),
         const SizedBox(width: 16),
         const Icon(Icons.restaurant_menu, color: Colors.black87, size: 22),

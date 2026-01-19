@@ -54,55 +54,55 @@ class _ChallengeTabState extends State<ChallengeTab> {
 
         Expanded(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: [
               // レシピカード
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  IconButton(
-                    onPressed: canGoPrevious ? _goToPrevious : null,
-                    icon: const Icon(Icons.chevron_left),
-                    color: Colors.white,
-                    disabledColor: Colors.white54,
-                  ),
-                  Expanded(
-                    child: AspectRatio(
-                      aspectRatio: 0.9,
-                      child: AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 250),
-                        switchInCurve: Curves.easeOut,
-                        switchOutCurve: Curves.easeIn,
-                        transitionBuilder: (child, animation) {
-                          return SlideTransition(
-                            position: Tween<Offset>(
-                              begin: const Offset(0.08, 0),
-                              end: Offset.zero,
-                            ).animate(animation),
-                            child: FadeTransition(
-                              opacity: animation,
-                              child: child,
-                            ),
-                          );
-                        },
-                        child: currentItem == null
-                            ? const SizedBox.shrink()
-                            : _RecipeCard(
-                                key: ValueKey(currentItem.id),
-                                item: currentItem,
+              Expanded(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      onPressed: canGoPrevious ? _goToPrevious : null,
+                      icon: const Icon(Icons.chevron_left),
+                      color: Colors.white,
+                      disabledColor: Colors.white54,
+                    ),
+                    Expanded(
+                      child: AspectRatio(
+                        aspectRatio: 0.9,
+                        child: AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 250),
+                          switchInCurve: Curves.easeOut,
+                          switchOutCurve: Curves.easeIn,
+                          transitionBuilder: (child, animation) {
+                            return SlideTransition(
+                              position: Tween<Offset>(
+                                begin: const Offset(0.08, 0),
+                                end: Offset.zero,
+                              ).animate(animation),
+                              child: FadeTransition(
+                                opacity: animation,
+                                child: child,
                               ),
+                            );
+                          },
+                          child: currentItem == null
+                              ? const SizedBox.shrink()
+                              : _RecipeCard(
+                                  key: ValueKey(currentItem.id),
+                                  item: currentItem,
+                                ),
+                        ),
                       ),
                     ),
-                  ),
-                  IconButton(
-                    onPressed: canGoNext ? _goToNext : null,
-                    icon: const Icon(Icons.chevron_right),
-                    color: Colors.white,
-                    disabledColor: Colors.white54,
-                  ),
-                ],
+                    IconButton(
+                      onPressed: canGoNext ? _goToNext : null,
+                      icon: const Icon(Icons.chevron_right),
+                      color: Colors.white,
+                      disabledColor: Colors.white54,
+                    ),
+                  ],
+                ),
               ),
-
               Padding(
                 padding: const EdgeInsets.only(top: 8),
                 child: Row(

@@ -10,7 +10,7 @@ class HomeBottomNav {
   static void goToIndex(BuildContext context, int index) {
     switch (index) {
       case challenge:
-        // TODO: 挑戦ページへの遷移を実装
+        context.go('/challenge');
         break;
       case history:
         context.go('/history');
