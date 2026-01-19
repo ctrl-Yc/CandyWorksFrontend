@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class HomeBottomNavigationBar extends StatelessWidget {
   final int selectedIndex;
-  final Function(int) onDestinationSelected;
+  final ValueChanged<int> onDestinationSelected;
 
   const HomeBottomNavigationBar({
     super.key,
@@ -10,59 +10,86 @@ class HomeBottomNavigationBar extends StatelessWidget {
     required this.onDestinationSelected,
   });
 
+  static const Color _backgroundColor = Color(0xFFF5F1EB);
+  static const Color _accentColor = Color(0xFFFF9538);
+  static const Color _iconColor = Color(0xFF6B4423);
+
+  static const TextStyle _labelTextStyle = TextStyle(color: _iconColor);
+  static const TextStyle _selectedLabelTextStyle = TextStyle(
+    color: _iconColor,
+    fontWeight: FontWeight.w500,
+  );
+
+  static const List<_NavDestinationData> _destinations = [
+    _NavDestinationData(
+      icon: Icons.restaurant_menu,
+      selectedIcon: Icons.restaurant_menu,
+      label: '挑戦',
+    ),
+    _NavDestinationData(
+      icon: Icons.history,
+      selectedIcon: Icons.restaurant,
+      label: '料理履歴',
+    ),
+    _NavDestinationData(
+      icon: Icons.home_outlined,
+      selectedIcon: Icons.home,
+      label: 'ホーム',
+    ),
+    _NavDestinationData(
+      icon: Icons.settings_outlined,
+      selectedIcon: Icons.settings,
+      label: '設定',
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-        color: Color(0xFFF5F1EB),
-        border: Border(top: BorderSide(color: Color(0xFFFF9538), width: 2)),
+        color: _backgroundColor,
+        border: Border(top: BorderSide(color: _accentColor, width: 2)),
       ),
-      child: Theme(
-        data: Theme.of(
-          context,
-        ).copyWith(iconTheme: const IconThemeData(color: Color(0xFF6B4423))),
+      child: NavigationBarTheme(
+        data: const NavigationBarThemeData(
+          backgroundColor: _backgroundColor,
+          indicatorColor: Colors.transparent,
+          iconTheme: WidgetStatePropertyAll(IconThemeData(color: _iconColor)),
+          labelTextStyle: WidgetStatePropertyAll(_labelTextStyle),
+        ),
         child: NavigationBar(
           selectedIndex: selectedIndex,
-          backgroundColor: const Color(0xFFF5F1EB),
-          indicatorColor: Colors.transparent,
           onDestinationSelected: onDestinationSelected,
           labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
           labelTextStyle: WidgetStateProperty.resolveWith((states) {
             if (states.contains(WidgetState.selected)) {
-              return const TextStyle(
-                color: Color(0xFF6B4423),
-                fontWeight: FontWeight.w500,
-              );
+              return _selectedLabelTextStyle;
             }
-            return const TextStyle(color: Color(0xFF6B4423));
+            return _labelTextStyle;
           }),
-          destinations: const [
-            NavigationDestination(
-              icon: Icon(Icons.restaurant_menu, color: Color(0xFF6B4423)),
-              selectedIcon: Icon(
-                Icons.restaurant_menu,
-                color: Color(0xFF6B4423),
-              ),
-              label: '挑戦',
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.history, color: Color(0xFF6B4423)),
-              selectedIcon: Icon(Icons.restaurant, color: Color(0xFF6B4423)),
-              label: '料理履歴',
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.home_outlined, color: Color(0xFF6B4423)),
-              selectedIcon: Icon(Icons.home, color: Color(0xFF6B4423)),
-              label: 'ホーム',
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.settings_outlined, color: Color(0xFF6B4423)),
-              selectedIcon: Icon(Icons.settings, color: Color(0xFF6B4423)),
-              label: '設定',
-            ),
-          ],
+          destinations: _destinations
+              .map(
+                (destination) => NavigationDestination(
+                  icon: Icon(destination.icon),
+                  selectedIcon: Icon(destination.selectedIcon),
+                  label: destination.label,
+                ),
+              )
+              .toList(growable: false),
         ),
       ),
     );
   }
+}
+
+class _NavDestinationData {
+  final IconData icon;
+  final IconData selectedIcon;
+  final String label;
+
+  const _NavDestinationData({
+    required this.icon,
+    required this.selectedIcon,
+    required this.label,
+  });
 }

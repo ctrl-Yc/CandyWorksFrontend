@@ -1,20 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../navigation/home_bottom_nav.dart';
 import '../widgets/bottom_navigation_bar.dart';
 import '../widgets/challenge_tab.dart';
 
-class HomePage extends ConsumerStatefulWidget {
+class HomePage extends ConsumerWidget {
   const HomePage({super.key});
 
   @override
-  ConsumerState<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends ConsumerState<HomePage> {
-  int _selectedIndex = 0;
-
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       backgroundColor: const Color(0xFFFF9538),
       appBar: AppBar(
@@ -28,11 +22,12 @@ class _HomePageState extends ConsumerState<HomePage> {
         ),
       ),
       bottomNavigationBar: HomeBottomNavigationBar(
-        selectedIndex: _selectedIndex,
-        onDestinationSelected: (i) {
-          setState(() {
-            _selectedIndex = i;
-          });
+        selectedIndex: HomeBottomNav.home,
+        onDestinationSelected: (index) {
+          if (index == HomeBottomNav.home) {
+            return;
+          }
+          HomeBottomNav.goToIndex(context, index);
         },
       ),
     );
