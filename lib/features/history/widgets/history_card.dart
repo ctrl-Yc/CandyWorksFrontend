@@ -17,11 +17,9 @@ class HistoryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final borderColor =
-        isSelected ? Colors.black87 : const Color(0xFF6B4423);
+    final borderColor = isSelected ? Colors.black87 : const Color(0xFF6B4423);
     final borderWidth = isSelected ? 2.0 : 1.0;
-    final backgroundColor =
-        isSelected ? const Color(0xFFFFF3E0) : Colors.white;
+    final backgroundColor = isSelected ? const Color(0xFFFFF3E0) : Colors.white;
     final boxShadow = isSelected
         ? const [
             BoxShadow(
@@ -69,10 +67,7 @@ class HistoryCard extends StatelessWidget {
               children: [
                 Text(
                   item.date,
-                  style: const TextStyle(
-                    color: Colors.black54,
-                    fontSize: 12,
-                  ),
+                  style: const TextStyle(color: Colors.black54, fontSize: 12),
                 ),
                 Icon(
                   item.isFavorite ? Icons.star : Icons.star_border,

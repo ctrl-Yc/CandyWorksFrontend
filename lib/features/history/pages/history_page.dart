@@ -39,10 +39,7 @@ class _HistoryPageState extends ConsumerState<HistoryPage> {
     });
   }
 
-  HistoryItem? _findSelectedItem(
-    List<HistoryItem> items,
-    String? selectedId,
-  ) {
+  HistoryItem? _findSelectedItem(List<HistoryItem> items, String? selectedId) {
     for (final item in items) {
       if (item.id == selectedId) {
         return item;
@@ -53,12 +50,15 @@ class _HistoryPageState extends ConsumerState<HistoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    final cookedItems =
-        HistoryMockData.cookedItems.take(3).toList(growable: false);
+    final cookedItems = HistoryMockData.cookedItems
+        .take(3)
+        .toList(growable: false);
     final favoriteItems = HistoryMockData.favoriteItems;
     final selectedCooked = _findSelectedItem(cookedItems, _selectedCookedId);
-    final selectedFavorite =
-        _findSelectedItem(favoriteItems, _selectedFavoriteId);
+    final selectedFavorite = _findSelectedItem(
+      favoriteItems,
+      _selectedFavoriteId,
+    );
     return Scaffold(
       backgroundColor: const Color(0xFFFF9538),
       body: SafeArea(

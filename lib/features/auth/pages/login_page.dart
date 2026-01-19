@@ -42,89 +42,91 @@ class _LoginPageState extends State<LoginPage> {
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 28),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(height: 60),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(height: 60),
 
-              // ロゴ画像
-              Center(
-                child: Image.asset(
-                  'assets/cookup_logo.png',
-                  width: 160,
-                  fit: BoxFit.contain,
-                ),
-              ),
-
-              const SizedBox(height: 80),
-
-              // メールアドレス
-              Align(alignment: Alignment.centerLeft),
-              const SizedBox(height: 4),
-              Container(
-                decoration: const BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(color: Colors.white, width: 1),
+                // ロゴ画像
+                Center(
+                  child: Image.asset(
+                    'assets/cookup_logo.png',
+                    width: 160,
+                    fit: BoxFit.contain,
                   ),
                 ),
-                child: TextField(
-                  controller: emailController,
-                  style: const TextStyle(color: Colors.white),
-                  decoration: const InputDecoration(
-                    labelText: 'Email',
-                  ),
-                ),
-              ),
 
-              const SizedBox(height: 30),
+                const SizedBox(height: 80),
 
-              // パスワード
-              Align(alignment: Alignment.centerLeft),
-              const SizedBox(height: 4),
-              Container(
-                decoration: const BoxDecoration(
-                  border: Border(
-                    bottom: BorderSide(color: Colors.white, width: 1),
-                  ),
-                ),
-                child: TextField(
-                  controller: passwordController,
-                  obscureText: true,
-                  style: const TextStyle(color: Colors.white),
-                  decoration: const InputDecoration(
-                    labelText: 'Password',
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 70),
-
-              // ログインボタン
-              SizedBox(
-                width: double.infinity,
-                height: 52,
-                child: ElevatedButton(
-                  onPressed: loading ? null : _handleLogin,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFFF9538),
-                    foregroundColor: Colors.white,
-                    elevation: 4,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      side: const BorderSide(color: Colors.white, width: 2),
+                // メールアドレス
+                Align(alignment: Alignment.centerLeft),
+                const SizedBox(height: 4),
+                Container(
+                  decoration: const BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(color: Colors.white, width: 1),
                     ),
                   ),
-                  child: const Text('Login'),
+                  child: TextField(
+                    controller: emailController,
+                    style: const TextStyle(color: Colors.white),
+                    decoration: const InputDecoration(
+                      labelText: 'Email',
+                    ),
+                  ),
                 ),
-              ),
 
-              TextButton(
-                onPressed: () {
-                  context.push('/register');
-                },
-                child: const Text('アカウント登録'),
-              ),
-            ],
+                const SizedBox(height: 30),
+
+                // パスワード
+                Align(alignment: Alignment.centerLeft),
+                const SizedBox(height: 4),
+                Container(
+                  decoration: const BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(color: Colors.white, width: 1),
+                    ),
+                  ),
+                  child: TextField(
+                    controller: passwordController,
+                    obscureText: true,
+                    style: const TextStyle(color: Colors.white),
+                    decoration: const InputDecoration(
+                      labelText: 'Password',
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 70),
+
+                // ログインボタン
+                SizedBox(
+                  width: double.infinity,
+                  height: 52,
+                  child: ElevatedButton(
+                    onPressed: loading ? null : _handleLogin,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFFF9538),
+                      foregroundColor: Colors.white,
+                      elevation: 4,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        side: const BorderSide(color: Colors.white, width: 2),
+                      ),
+                    ),
+                    child: const Text('Login'),
+                  ),
+                ),
+
+                TextButton(
+                  onPressed: () {
+                    context.push('/register');
+                  },
+                  child: const Text('アカウント登録'),
+                ),
+              ],
+            ),
           ),
         ),
       ),

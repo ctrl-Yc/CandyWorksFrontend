@@ -5,6 +5,8 @@ class HistoryItem {
   final bool isFavorite;
   final String imageUrl;
   final String feedback;
+  final String cookTime;
+  final String cookCost;
 
   const HistoryItem({
     required this.id,
@@ -13,5 +15,7 @@ class HistoryItem {
     required this.isFavorite,
     required this.imageUrl,
     required this.feedback,
+    required this.cookTime,
+    required this.cookCost,
   });
 }

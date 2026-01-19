@@ -61,10 +61,7 @@ class HistorySection extends StatelessWidget {
               final isSelected = item.id == selectedId;
               return GestureDetector(
                 onTap: () => onSelect(item),
-                child: HistoryCard(
-                  item: item,
-                  isSelected: isSelected,
-                ),
+                child: HistoryCard(item: item, isSelected: isSelected),
               );
             },
           ),
